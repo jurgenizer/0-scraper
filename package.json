@@ -1,0 +1,28 @@
+{
+  "name": "0-scraper",
+  "version": "1.0.0",
+  "description": "A web scraper, for scraping text",
+  "keywords": [
+    "scraper",
+    "node"
+  ],
+  "homepage": "https://github.com/jurgenizer/0-scraper#readme",
+  "bugs": {
+    "url": "https://github.com/jurgenizer/0-scraper/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jurgenizer/0-scraper.git"
+  },
+  "license": "MIT",
+  "author": "Jurgen Geitner",
+  "type": "module",
+  "main": "scraper.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "axios": "^1.15.2",
+    "cheerio": "^1.2.0"
+  }
+}

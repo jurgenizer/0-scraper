@@ -1,0 +1,3750 @@
+Skip to content
+		
+	
+	
+		
+	
+  
+  
+  
+    
+      
+      
+    
+  
+  
+    [data-theme="dark"] .flame {
+      fill: url(#gradient);
+    }
+  
+
+
+	
+	
+
+
+
+	
+	
+		
+	
+		
+			
+				
+			
+			Search
+		
+		
+	
+
+
+
+	
+	
+		
+			
+			
+					GitHub
+					
+	
+
+				
+					Discord
+					
+	
+
+				
+		
+		
+		
+	
+	
+	Select theme
+	
+	
+
+	
+		DarkLightAuto
+	
+	
+	
+
+
+
+
+
+
+	StarlightThemeProvider.updatePickers();
+
+
+const r="starlight-theme",o=e=>e==="auto"||e==="dark"||e==="light"?e:"auto",c=()=>o(typeof localStorage<"u"&&localStorage.getItem(r));function n(e){typeof localStorage<"u"&&localStorage.setItem(r,e==="light"||e==="dark"?e:"")}const l=()=>matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";function t(e){StarlightThemeProvider.updatePickers(e),document.documentElement.dataset.theme=e==="auto"?l():e,n(e)}matchMedia("(prefers-color-scheme: light)").addEventListener("change",()=>{c()==="auto"&&t("auto")});class s extends HTMLElement{constructor(){super(),t(c()),this.querySelector("select")?.addEventListener("change",a=>{a.currentTarget instanceof HTMLSelectElement&&t(o(a.currentTarget.value))})}}customElements.define("starlight-theme-select",s);
+		
+			
+	Select language
+	
+	
+
+	
+		EnglishDeutschPortuguês do BrasilEspañol简体中文正體中文Françaisहिन्दीالعربية日本語한국어PolskiРусскийItaliano
+	
+	
+	
+
+
+		
+
+class s extends HTMLElement{constructor(){super();const e=this.querySelector("select");e&&(e.addEventListener("change",t=>{t.currentTarget instanceof HTMLSelectElement&&(window.location.pathname=t.currentTarget.value)}),window.addEventListener("pageshow",t=>{if(!t.persisted)return;const n=e.querySelector("option[selected]")?.index;n!==e.selectedIndex&&(e.selectedIndex=n??0)}))}}customElements.define("starlight-lang-select",s);
+	
+
+	
+				
+	
+		
+	
+
+		
+	
+
+	
+
+
+class s extends HTMLElement{constructor(){super(),this.btn=this.querySelector("button"),this.btn.addEventListener("click",()=>this.toggleExpanded());const t=this.closest("nav");t&&t.addEventListener("keyup",e=>this.closeOnEscape(e))}setExpanded(t){this.setAttribute("aria-expanded",String(t)),document.body.toggleAttribute("data-mobile-menu-expanded",t)}toggleExpanded(){this.setExpanded(this.getAttribute("aria-expanded")!=="true")}closeOnEscape(t){t.code==="Escape"&&(this.setExpanded(!1),this.btn.focus())}}customElements.define("starlight-menu-button",s);
+				
+					
+						class d extends HTMLElement{id=Math.floor(Math.random()*1e11).toString(32);count=0;TabStore=[];PanelStore=[];constructor(){super();const n=this.querySelectorAll(".panels > [id]"),s=this.querySelector(".tab-list"),t=s.querySelectorAll("a");s.setAttribute("role","tablist");let i=0;Array.prototype.forEach.call(t,(e,a)=>{e.setAttribute("role","tab"),e.setAttribute("id",this.id+"tab"+this.count++),e.setAttribute("tabindex","-1"),e.parentElement?.setAttribute("role","presentation"),this.TabStore[a]||this.TabStore.push(new Set),this.TabStore[a].add(e),"initial"in e.dataset&&e.dataset.initial!=="false"&&(i=a);const c=r=>{r.preventDefault();const o=s.querySelector("[aria-selected]");r.currentTarget!==o&&this.switchTab(r.currentTarget,a)};e.addEventListener("click",c),e.addEventListener("auxclick",c),e.addEventListener("keydown",r=>{const o=Array.prototype.indexOf.call(t,r.currentTarget),l=r.key==="ArrowLeft"?o-1:r.key==="ArrowRight"?o+1:r.key==="Home"?0:r.key==="End"?t.length-1:null;l!==null&&(r.preventDefault(),t[l]&&this.switchTab(t[l],l))})}),Array.prototype.forEach.call(n,(e,a)=>{e.setAttribute("role","tabpanel"),e.setAttribute("tabindex","-1"),e.setAttribute("aria-labelledby",t[a].id),e.hidden=!0,this.PanelStore[a]||this.PanelStore.push(new Set),this.PanelStore[a].add(e)}),t[i].removeAttribute("tabindex"),t[i].setAttribute("aria-selected","true"),n[i].hidden=!1}switchTab(n,s){this.TabStore.forEach(t=>t.forEach(i=>{i.removeAttribute("aria-selected"),i.setAttribute("tabindex","-1")})),this.TabStore[s].forEach(t=>{t.removeAttribute("tabindex"),t.setAttribute("aria-selected","true")}),this.PanelStore.forEach(t=>t.forEach(i=>{i.hidden=!0})),this.PanelStore[s].forEach(t=>{t.hidden=!1}),n.focus()}}customElements.define("tabbed-content",d);
+	
+		(() => {
+			try {
+				if (!matchMedia('(min-width: 50em)').matches) return;
+				/** @type {HTMLElement | null} */
+				const target = document.querySelector('sl-sidebar-state-persist');
+				const state = JSON.parse(sessionStorage.getItem('sl-sidebar-state') || '0');
+				if (!target || !state || target.dataset.hash !== state.hash) return;
+				window._starlightScrollRestore = state.scroll;
+				customElements.define(
+					'sl-sidebar-restore',
+					class SidebarRestore extends HTMLElement {
+						connectedCallback() {
+							try {
+								const idx = parseInt(this.dataset.index || '');
+								const details = this.closest('details');
+								if (details && typeof state.open[idx] === 'boolean') details.open = state.open[idx];
+							} catch {}
+						}
+					}
+				);
+			} catch {}
+		})();
+	
+	
+	
+		
+	
+		
+						
+	
+ Tutorial
+	
+
+	
+		
+						
+	
+ Guide
+	
+
+	
+		
+						
+	
+ Reference
+	
+
+	
+		
+						
+	
+ Ecosystem
+	
+
+	
+
+	
+		
+		
+		
+	
+					
+	
+				
+						Introduction
+						
+					
+			
+				
+						Unit 1 - Setup
+						
+					
+			
+				
+						Unit 2 - Pages
+						
+					
+			
+				
+						Unit 3 - Components
+						
+					
+			
+				
+						Unit 4 - Layouts
+						
+					
+			
+				
+						Unit 5 - Astro API
+						
+					
+			
+				
+						Unit 6 - Astro Islands
+						
+					
+			
+
+				
+
+	
+					
+	
+				
+						
+							
+								Welcome, world!
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						Why Astro?
+						
+					
+			
+				
+						Islands architecture
+						
+					
+			
+				
+						Courses
+						
+					
+			
+
+					
+			
+				
+						
+							
+								Start a new project
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						Installation
+						
+					
+			
+				
+						Project structure
+						
+					
+			
+				
+						Develop and build
+						
+					
+			
+
+					
+			
+				
+						
+							
+								Configuration
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						Configuration overview
+						
+					
+			
+				
+						Editor setup
+						
+					
+			
+				
+						TypeScript
+						
+					
+			
+				
+						Environment variables
+						
+					
+			
+				
+						Working with integrations
+						
+					
+			
+				
+						Build with AI
+						
+					
+			
+				
+						Dev toolbar
+						
+					
+			
+
+					
+			
+				
+						
+							
+								Routing and navigation
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						Pages
+						
+					
+			
+				
+						Routing
+						
+					
+			
+				
+						Endpoints
+						
+					
+			
+				
+						Middleware
+						
+					
+			
+				
+						Internationalization (i18n)
+						
+					
+			
+				
+						Prefetch
+						
+					
+			
+				
+						View transitions
+						
+					
+			
+
+					
+			
+				
+						
+							
+								Build your UI
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						Components
+						
+					
+			
+				
+						Layouts
+						
+					
+			
+				
+						Styles and CSS
+						
+					
+			
+				
+						Fonts
+						
+					
+			
+				
+						Syntax Highlighting
+						
+					
+			
+				
+						Scripts and event handling
+						
+					
+			
+				
+						Front-end frameworks
+						
+					
+			
+
+					
+			
+				
+						
+							
+								Add content to your site
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						Markdown
+						
+					
+			
+				
+						Content collections
+						
+					
+			
+				
+						Images
+						
+					
+			
+				
+						Data fetching
+						
+					
+			
+				
+						Astro DB
+						
+					
+			
+
+					
+			
+				
+						
+							
+								Server rendering
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						On-demand rendering
+						
+					
+			
+				
+						Server islands
+						
+					
+			
+				
+						Actions
+						
+					
+			
+				
+						Sessions
+						
+					
+			
+
+					
+			
+				
+						
+							
+								Upgrade
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						Upgrade Astro
+						
+					
+			
+				
+						
+							
+								Major upgrade guides
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						v6.0
+						
+					
+			
+				
+						v5.0
+						
+					
+			
+				
+						v4.0
+						
+					
+			
+				
+						v3.0
+						
+					
+			
+				
+						v2.0
+						
+					
+			
+				
+						v1.0
+						
+					
+			
+
+					
+			
+
+					
+			
+				
+						Troubleshooting
+						
+					
+			
+				
+						
+							
+								How-to recipes
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						Recipes overview
+						
+					
+			
+				
+						Installing a Vite or Rollup plugin
+						
+					
+			
+				
+						Analyze bundle size
+						
+					
+			
+				
+						Build a custom image component
+						
+					
+			
+				
+						Build HTML forms in Astro pages
+						
+					
+			
+				
+						Build forms with API routes
+						
+					
+			
+				
+						Use Bun with Astro
+						
+					
+			
+				
+						Call endpoints from the server
+						
+					
+			
+				
+						Verify a Captcha
+						
+					
+			
+				
+						Customize file names in the build output
+						
+					
+			
+				
+						Build your Astro site with Docker
+						
+					
+			
+				
+						Dynamically import images
+						
+					
+			
+				
+						Add icons to external links
+						
+					
+			
+				
+						Add i18n features
+						
+					
+			
+				
+						Create a dev toolbar app
+						
+					
+			
+				
+						Add last modified time
+						
+					
+			
+				
+						Add reading time
+						
+					
+			
+				
+						Add an RSS feed
+						
+					
+			
+				
+						Share state between Astro components
+						
+					
+			
+				
+						Share state between islands
+						
+					
+			
+				
+						Using streaming to improve page performance
+						
+					
+			
+				
+						Style rendered Markdown with Tailwind Typography
+						
+					
+			
+
+					
+			
+				
+						
+							
+								Migrate to Astro
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						Site migration overview
+						
+					
+			
+				
+						Create React App
+						
+					
+			
+				
+						Docusaurus
+						
+					
+			
+				
+						Eleventy
+						
+					
+			
+				
+						Gatsby
+						
+					
+			
+				
+						GitBook
+						
+					
+			
+				
+						Gridsome
+						
+					
+			
+				
+						Hugo
+						
+					
+			
+				
+						Jekyll
+						
+					
+			
+				
+						Next.js
+						
+					
+			
+				
+						NuxtJS
+						
+					
+			
+				
+						Pelican
+						
+					
+			
+				
+						SvelteKit
+						
+					
+			
+				
+						VuePress
+						
+					
+			
+				
+						WordPress
+						
+					
+			
+
+					
+			
+				
+						Contribute to Astro
+						
+					
+			
+
+				
+
+	
+					
+	
+				
+						
+							
+								Astro Template Syntax
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						Template expressions reference
+						
+					
+			
+				
+						Template directives reference
+						
+					
+			
+
+					
+			
+				
+						Configuration Reference
+						
+					
+			
+				
+						CLI Commands
+						
+					
+			
+				
+						Imports reference
+						
+					
+			
+				
+						Routing Reference
+						
+					
+			
+				
+						
+							
+								Runtime API
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						Render context
+						
+					
+			
+				
+						astro:actions
+						
+					
+			
+				
+						astro/app
+						
+					
+			
+				
+						astro:assets
+						
+					
+			
+				
+						astro:config
+						
+					
+			
+				
+						astro:content
+						
+					
+			
+				
+						astro:env
+						
+					
+			
+				
+						astro:i18n
+						
+					
+			
+				
+						astro:middleware
+						
+					
+			
+				
+						astro:static-paths
+						
+					
+			
+				
+						astro:transitions
+						
+					
+			
+				
+						astro/zod
+						
+					
+			
+
+					
+			
+				
+						
+							
+								Other development APIs
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						Integration API
+						
+					
+			
+				
+						Adapter API
+						
+					
+			
+				
+						Renderer API
+						
+					
+			
+				
+						Content Loader API
+						
+					
+			
+				
+						Image Service API
+						
+					
+			
+				
+						Dev Toolbar App API
+						
+					
+			
+				
+						Session Driver API
+						
+					
+			
+				
+						Font Provider API
+						
+					
+			
+				
+						Container API (experimental)
+						
+					
+			
+				
+						Programmatic Astro API (experimental)
+						
+					
+			
+
+					
+			
+				
+						
+							
+								Experimental features
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						Configuring experimental flags
+						
+					
+			
+				
+						Route caching
+						
+					
+			
+				
+						Client prerendering
+						
+					
+			
+				
+						Intellisense for collections
+						
+					
+			
+				
+						Chrome DevTools workspace
+						
+					
+			
+				
+						SVG optimization
+						
+					
+			
+				
+						Queued rendering
+						
+					
+			
+				
+						Rust compiler
+						
+					
+			
+				
+						Logger
+						
+					
+			
+
+					
+			
+				
+						Legacy flags
+						
+					
+			
+				
+						Error reference
+						
+					
+			
+
+				
+
+	
+					
+	
+				
+						
+							
+								UI frameworks
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						Alpine.js
+						
+					
+			
+				
+						Preact
+						
+					
+			
+				
+						React
+						
+					
+			
+				
+						SolidJS
+						
+					
+			
+				
+						Svelte
+						
+					
+			
+				
+						Vue
+						
+					
+			
+
+					
+			
+				
+						
+							
+								Adapters
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						Cloudflare
+						
+					
+			
+				
+						Netlify
+						
+					
+			
+				
+						Node
+						
+					
+			
+				
+						Vercel
+						
+					
+			
+
+					
+			
+				
+						
+							
+								Other official integrations
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						DB
+						
+					
+			
+				
+						Markdoc
+						
+					
+			
+				
+						MDX
+						
+					
+			
+				
+						Partytown
+						
+					
+			
+				
+						Sitemap
+						
+					
+			
+
+					
+			
+				
+						
+							
+								Deployment guides
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						Deployment overview
+						
+					
+			
+				
+						AWS
+						
+					
+			
+				
+						AWS via Flightcontrol
+						
+					
+			
+				
+						AWS via SST
+						
+					
+			
+				
+						Azion
+						
+					
+			
+				
+						Buddy
+						
+					
+			
+				
+						Cleavr
+						
+					
+			
+				
+						Clever Cloud
+						
+					
+			
+				
+						Cloudflare
+						
+					
+			
+				
+						CloudRay
+						
+					
+			
+				
+						Deno Deploy
+						
+					
+			
+				
+						DeployHQ
+						
+					
+			
+				
+						EdgeOne Pages
+						
+					
+			
+				
+						Firebase
+						
+					
+			
+				
+						Fleek
+						
+					
+			
+				
+						Fly.io
+						
+					
+			
+				
+						GitHub Pages
+						
+					
+			
+				
+						GitLab Pages
+						
+					
+			
+				
+						Google Cloud
+						
+					
+			
+				
+						Heroku
+						
+					
+			
+				
+						Juno
+						
+					
+			
+				
+						Microsoft Azure
+						
+					
+			
+				
+						Netlify
+						
+					
+			
+				
+						Railway
+						
+					
+			
+				
+						Render
+						
+					
+			
+				
+						Seenode
+						
+					
+			
+				
+						Sevalla
+						
+					
+			
+				
+						Stormkit
+						
+					
+			
+				
+						Surge
+						
+					
+			
+				
+						Vercel
+						
+					
+			
+				
+						Zeabur
+						
+					
+			
+				
+						Zephyr Cloud
+						
+					
+			
+				
+						Zerops
+						
+					
+			
+
+					
+			
+				
+						
+							
+								Content management systems
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						CMS overview
+						
+					
+			
+				
+						ApostropheCMS
+						
+					
+			
+				
+						Builder.io
+						
+					
+			
+				
+						ButterCMS
+						
+					
+			
+				
+						Caisy
+						
+					
+			
+				
+						CloudCannon
+						
+					
+			
+				
+						Contentful
+						
+					
+			
+				
+						Cosmic
+						
+					
+			
+				
+						Craft CMS
+						
+					
+			
+				
+						Craft Cross CMS
+						
+					
+			
+				
+						Crystallize
+						
+					
+			
+				
+						DatoCMS
+						
+					
+			
+				
+						Decap CMS
+						
+					
+			
+				
+						Directus
+						
+					
+			
+				
+						Drupal
+						
+					
+			
+				
+						Flotiq
+						
+					
+			
+				
+						Front Matter CMS
+						
+					
+			
+				
+						Ghost
+						
+					
+			
+				
+						GitCMS
+						
+					
+			
+				
+						Hashnode
+						
+					
+			
+				
+						Hygraph
+						
+					
+			
+				
+						JekyllPad
+						
+					
+			
+				
+						Keystatic
+						
+					
+			
+				
+						KeystoneJS
+						
+					
+			
+				
+						Kontent.ai
+						
+					
+			
+				
+						microCMS
+						
+					
+			
+				
+						Optimizely CMS
+						
+					
+			
+				
+						Pages CMS
+						
+					
+			
+				
+						Payload CMS
+						
+					
+			
+				
+						Prepr CMS
+						
+					
+			
+				
+						Prismic
+						
+					
+			
+				
+						Sanity
+						
+					
+			
+				
+						Sitecore XM
+						
+					
+			
+				
+						Sitepins
+						
+					
+			
+				
+						Spinal
+						
+					
+			
+				
+						Statamic
+						
+					
+			
+				
+						Storyblok
+						
+					
+			
+				
+						Strapi
+						
+					
+			
+				
+						StudioCMS
+						
+					
+			
+				
+						Tina CMS
+						
+					
+			
+				
+						Umbraco
+						
+					
+			
+				
+						Vault CMS
+						
+					
+			
+				
+						Wordpress
+						
+					
+			
+
+					
+			
+				
+						
+							
+								Backend services
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						Backend services overview
+						
+					
+			
+				
+						Appwrite
+						
+					
+			
+				
+						Firebase
+						
+					
+			
+				
+						Neon
+						
+					
+			
+				
+						Prisma Postgres
+						
+					
+			
+				
+						Scalekit
+						
+					
+			
+				
+						Sentry
+						
+					
+			
+				
+						Supabase
+						
+					
+			
+				
+						Turso
+						
+					
+			
+				
+						Xata
+						
+					
+			
+
+					
+			
+				
+						
+							
+								Image and video hosting
+								
+							
+							
+	
+
+						
+						
+						
+	
+				
+						Media hosting overview
+						
+					
+			
+				
+						Cloudinary
+						
+					
+			
+				
+						Mux
+						
+					
+			
+
+					
+			
+				
+						E-commerce
+						
+					
+			
+				
+						Authentication
+						
+					
+			
+				
+						Testing
+						
+					
+			
+
+				
+
+	
+
+
+
+
+
+	
+		(() => {
+			const scroller = document.getElementById('starlight__sidebar');
+			if (!window._starlightScrollRestore || !scroller) return;
+			scroller.scrollTop = window._starlightScrollRestore;
+			delete window._starlightScrollRestore;
+		})();
+	
+
+
+	
+	
+	Sponsored by
+	
+		
+	
+	
+
+	
+
+	
+		
+  
+  
+
+	
+
+	
+		
+	
+	
+	
+
+	
+
+	
+	
+
+	
+		
+	
+
+	
+
+	
+		
+	
+	
+	
+	
+	
+	
+	
+
+	
+
+	
+		
+	
+	
+	
+	
+
+	
+
+	
+	
+		
+			
+					GitHub
+					
+	
+
+				
+					Discord
+					
+	
+
+				
+		
+	
+	
+	
+	
+	Select theme
+	
+	
+
+	
+		DarkLightAuto
+	
+	
+	
+
+
+
+
+
+
+	StarlightThemeProvider.updatePickers();
+
+
+
+	
+			
+	Select language
+	
+	
+
+	
+		EnglishDeutschPortuguês do BrasilEspañol简体中文正體中文Françaisहिन्दीالعربية日本語한국어PolskiРусскийItaliano
+	
+	
+	
+
+
+		
+
+
+
+
+
+
+
+	
+	Sponsored by
+	
+		
+	
+	
+
+	
+
+	
+		
+  
+  
+
+	
+
+	
+		
+	
+	
+	
+
+	
+
+	
+	
+
+	
+		
+	
+
+	
+
+	
+		
+	
+	
+	
+	
+	
+	
+	
+
+	
+
+	
+		
+	
+	
+	
+	
+
+	
+
+
+					
+				
+			
+	
+			
+			const a=document.getElementById("starlight__sidebar"),n=a?.querySelector("sl-sidebar-state-persist"),o="sl-sidebar-state",i=()=>{let t=[];const e=n?.dataset.hash||"";try{const s=sessionStorage.getItem(o),r=JSON.parse(s||"{}");Array.isArray(r.open)&&r.hash===e&&(t=r.open)}catch{}return{hash:e,open:t,scroll:a?.scrollTop||0}},c=t=>{try{sessionStorage.setItem(o,JSON.stringify(t))}catch{}},d=()=>c(i()),l=(t,e)=>{const s=i();s.open[e]=t,c(s)};n?.addEventListener("click",t=>{if(!(t.target instanceof Element))return;const e=t.target.closest("summary")?.closest("details");if(!e)return;const s=e.querySelector("sl-sidebar-restore"),r=parseInt(s?.dataset.index||"");isNaN(r)||l(!e.open,r)});addEventListener("visibilitychange",()=>{document.visibilityState==="hidden"&&d()});addEventListener("pageHide",d);
+	
+				
+					
+			
+				
+			
+				
+					
+						
+							Tutorial Tracker
+							
+	
+
+						
+						
+					
+					
+						
+	
+	
+		
+	
+		
+						
+	
+		Unit
+		0
+		(0/2
+		Complete)
+	
+	
+		
+		0
+	
+
+
+
+					
+	
+
+	
+		
+						
+	
+		Unit
+		1
+		(0/6
+		Complete)
+	
+	
+		
+		1
+	
+
+
+
+					
+	
+
+	
+		
+						
+	
+		Unit
+		2
+		(0/6
+		Complete)
+	
+	
+		
+		2
+	
+
+
+
+					
+	
+
+	
+		
+						
+	
+		Unit
+		3
+		(0/5
+		Complete)
+	
+	
+		
+		3
+	
+
+
+
+					
+	
+
+	
+		
+						
+	
+		Unit
+		4
+		(0/4
+		Complete)
+	
+	
+		
+		4
+	
+
+
+
+					
+	
+
+	
+		
+						
+	
+		Unit
+		5
+		(0/5
+		Complete)
+	
+	
+		
+		5
+	
+
+
+
+					
+	
+
+	
+		
+						
+	
+		Unit
+		6
+		(0/5
+		Complete)
+	
+	
+		
+		6
+	
+
+
+
+					
+	
+
+	
+
+	
+		
+		
+		
+	
+					
+						Welcome, world!
+						
+							
+										
+											
+												
+	To-do
+	
+		0
+		
+			
+		
+	
+
+
+
+												Build your first Astro Blog
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		1
+		
+			
+		
+	
+
+
+
+												About this Tutorial
+											
+										
+										
+									
+						
+					
+				
+
+	
+					
+						Create and deploy your first Astro site
+						
+							
+										
+											
+												
+	To-do
+	
+		0
+		
+			
+		
+	
+
+
+
+												Check in: Unit 1 - Setup
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		1
+		
+			
+		
+	
+
+
+
+												Prepare your dev environment
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		2
+		
+			
+		
+	
+
+
+
+												Create your first Astro project
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		3
+		
+			
+		
+	
+
+
+
+												Write your first line of Astro
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		4
+		
+			
+		
+	
+
+
+
+												Store your repository online
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		5
+		
+			
+		
+	
+
+
+
+												Deploy your site to the web
+											
+										
+										
+									
+						
+					
+				
+
+	
+					
+						Add, style and link to pages on your site
+						
+							
+										
+											
+												
+	To-do
+	
+		0
+		
+			
+		
+	
+
+
+
+												Check in: Unit 2 - Pages
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		1
+		
+			
+		
+	
+
+
+
+												Create your first Astro page
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		2
+		
+			
+		
+	
+
+
+
+												Write your first Markdown blog post
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		3
+		
+			
+		
+	
+
+
+
+												Add dynamic content about you
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		4
+		
+			
+		
+	
+
+
+
+												Style your About page
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		5
+		
+			
+		
+	
+
+
+
+												Add site-wide styling
+											
+										
+										
+									
+						
+					
+				
+
+	
+					
+						Build and design with Astro UI components
+						
+							
+										
+											
+												
+	To-do
+	
+		0
+		
+			
+		
+	
+
+
+
+												Check in: Unit 3 - Components
+											
+										
+										
+												
+															
+																Looking ahead
+															
+														
+															
+																Checklist
+															
+														
+											
+									
+										
+											
+												
+	To-do
+	
+		1
+		
+			
+		
+	
+
+
+
+												Make a reusable Navigation component
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		2
+		
+			
+		
+	
+
+
+
+												Create a social media footer
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		3
+		
+			
+		
+	
+
+
+
+												Build it yourself - Header
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		4
+		
+			
+		
+	
+
+
+
+												Send your first script to the browser
+											
+										
+										
+									
+						
+					
+				
+
+	
+					
+						Save time and energy with reusable page layouts
+						
+							
+										
+											
+												
+	To-do
+	
+		0
+		
+			
+		
+	
+
+
+
+												Check in: Unit 4 - Layouts
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		1
+		
+			
+		
+	
+
+
+
+												Build your first layout
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		2
+		
+			
+		
+	
+
+
+
+												Create and pass data to a custom blog layout
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		3
+		
+			
+		
+	
+
+
+
+												Combine layouts to get the best of both worlds
+											
+										
+										
+									
+						
+					
+				
+
+	
+					
+						Beef up your blog
+						
+							
+										
+											
+												
+	To-do
+	
+		0
+		
+			
+		
+	
+
+
+
+												Check in: Unit 5 - Astro API
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		1
+		
+			
+		
+	
+
+
+
+												Create a blog post archive
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		2
+		
+			
+		
+	
+
+
+
+												Generate tag pages
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		3
+		
+			
+		
+	
+
+
+
+												Build a tag index page
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		4
+		
+			
+		
+	
+
+
+
+												Add an RSS feed
+											
+										
+										
+									
+						
+					
+				
+
+	
+					
+						Set sail for Astro islands
+						
+							
+										
+											
+												
+	To-do
+	
+		0
+		
+			
+		
+	
+
+
+
+												Check in: Unit 6 - Astro Islands
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		1
+		
+			
+		
+	
+
+
+
+												Build your first Astro island
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		2
+		
+			
+		
+	
+
+
+
+												Back on dry land. Take your blog from day to night, no island required!
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		3
+		
+			
+		
+	
+
+
+
+												Congratulations!
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		4
+		
+			
+		
+	
+
+
+
+												Optional: Make a content collection
+											
+										
+										
+									
+						
+					
+				
+
+	
+
+
+
+
+					
+				
+			
+		
+
+
+			
+			
+				
+					
+			
+				
+					Tutorial Tracker
+				
+				
+	
+	
+		
+	
+		
+						
+	
+		Unit
+		0
+		(0/2
+		Complete)
+	
+	
+		
+		0
+	
+
+
+
+					
+	
+
+	
+		
+						
+	
+		Unit
+		1
+		(0/6
+		Complete)
+	
+	
+		
+		1
+	
+
+
+
+					
+	
+
+	
+		
+						
+	
+		Unit
+		2
+		(0/6
+		Complete)
+	
+	
+		
+		2
+	
+
+
+
+					
+	
+
+	
+		
+						
+	
+		Unit
+		3
+		(0/5
+		Complete)
+	
+	
+		
+		3
+	
+
+
+
+					
+	
+
+	
+		
+						
+	
+		Unit
+		4
+		(0/4
+		Complete)
+	
+	
+		
+		4
+	
+
+
+
+					
+	
+
+	
+		
+						
+	
+		Unit
+		5
+		(0/5
+		Complete)
+	
+	
+		
+		5
+	
+
+
+
+					
+	
+
+	
+		
+						
+	
+		Unit
+		6
+		(0/5
+		Complete)
+	
+	
+		
+		6
+	
+
+
+
+					
+	
+
+	
+
+	
+		
+		
+		
+	
+					
+						Welcome, world!
+						
+							
+										
+											
+												
+	To-do
+	
+		0
+		
+			
+		
+	
+
+
+
+												Build your first Astro Blog
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		1
+		
+			
+		
+	
+
+
+
+												About this Tutorial
+											
+										
+										
+									
+						
+					
+				
+
+	
+					
+						Create and deploy your first Astro site
+						
+							
+										
+											
+												
+	To-do
+	
+		0
+		
+			
+		
+	
+
+
+
+												Check in: Unit 1 - Setup
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		1
+		
+			
+		
+	
+
+
+
+												Prepare your dev environment
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		2
+		
+			
+		
+	
+
+
+
+												Create your first Astro project
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		3
+		
+			
+		
+	
+
+
+
+												Write your first line of Astro
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		4
+		
+			
+		
+	
+
+
+
+												Store your repository online
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		5
+		
+			
+		
+	
+
+
+
+												Deploy your site to the web
+											
+										
+										
+									
+						
+					
+				
+
+	
+					
+						Add, style and link to pages on your site
+						
+							
+										
+											
+												
+	To-do
+	
+		0
+		
+			
+		
+	
+
+
+
+												Check in: Unit 2 - Pages
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		1
+		
+			
+		
+	
+
+
+
+												Create your first Astro page
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		2
+		
+			
+		
+	
+
+
+
+												Write your first Markdown blog post
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		3
+		
+			
+		
+	
+
+
+
+												Add dynamic content about you
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		4
+		
+			
+		
+	
+
+
+
+												Style your About page
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		5
+		
+			
+		
+	
+
+
+
+												Add site-wide styling
+											
+										
+										
+									
+						
+					
+				
+
+	
+					
+						Build and design with Astro UI components
+						
+							
+										
+											
+												
+	To-do
+	
+		0
+		
+			
+		
+	
+
+
+
+												Check in: Unit 3 - Components
+											
+										
+										
+												
+															
+																Looking ahead
+															
+														
+															
+																Checklist
+															
+														
+											
+									
+										
+											
+												
+	To-do
+	
+		1
+		
+			
+		
+	
+
+
+
+												Make a reusable Navigation component
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		2
+		
+			
+		
+	
+
+
+
+												Create a social media footer
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		3
+		
+			
+		
+	
+
+
+
+												Build it yourself - Header
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		4
+		
+			
+		
+	
+
+
+
+												Send your first script to the browser
+											
+										
+										
+									
+						
+					
+				
+
+	
+					
+						Save time and energy with reusable page layouts
+						
+							
+										
+											
+												
+	To-do
+	
+		0
+		
+			
+		
+	
+
+
+
+												Check in: Unit 4 - Layouts
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		1
+		
+			
+		
+	
+
+
+
+												Build your first layout
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		2
+		
+			
+		
+	
+
+
+
+												Create and pass data to a custom blog layout
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		3
+		
+			
+		
+	
+
+
+
+												Combine layouts to get the best of both worlds
+											
+										
+										
+									
+						
+					
+				
+
+	
+					
+						Beef up your blog
+						
+							
+										
+											
+												
+	To-do
+	
+		0
+		
+			
+		
+	
+
+
+
+												Check in: Unit 5 - Astro API
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		1
+		
+			
+		
+	
+
+
+
+												Create a blog post archive
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		2
+		
+			
+		
+	
+
+
+
+												Generate tag pages
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		3
+		
+			
+		
+	
+
+
+
+												Build a tag index page
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		4
+		
+			
+		
+	
+
+
+
+												Add an RSS feed
+											
+										
+										
+									
+						
+					
+				
+
+	
+					
+						Set sail for Astro islands
+						
+							
+										
+											
+												
+	To-do
+	
+		0
+		
+			
+		
+	
+
+
+
+												Check in: Unit 6 - Astro Islands
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		1
+		
+			
+		
+	
+
+
+
+												Build your first Astro island
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		2
+		
+			
+		
+	
+
+
+
+												Back on dry land. Take your blog from day to night, no island required!
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		3
+		
+			
+		
+	
+
+
+
+												Congratulations!
+											
+										
+										
+									
+										
+											
+												
+	To-do
+	
+		4
+		
+			
+		
+	
+
+
+
+												Optional: Make a content collection
+											
+										
+										
+									
+						
+					
+				
+
+	
+
+
+
+
+			
+		
+
+
+				
+				
+					
+	
+		
+
+		Learn Astro with Coding in Public
+		
+			
+				
+					
+				
+				150+ video lessons
+			
+			•
+			Astro v5 ready
+		
+		
+	
+	Get 20% off
+	
+
+	
+
+
+document.querySelectorAll("a[data-learn-astro-cta]").forEach(a=>a.addEventListener("click",()=>{window.fathom?.trackEvent("Docs: Coding in Public campaign click")}));
+				
+			
+		
+				
+			
+	
+				
+				
+					
+					
+					
+								
+	
+									Check in: Unit 3 - Components
+									
+
+								
+	
+									
+	
+										Now that you have .astro and .md files generating entire pages on your website, it’s time to make and reuse smaller bits of HTML with Astro components!
+Looking aheadSection titled “Looking ahead”
+In this unit, you’ll learn how to create Astro components to reuse code for common elements across your website.
+You’ll build:
+
+A Navigation component that presents a menu of links to your pages
+A Footer component to include at the bottom of each page
+A Social Media component, used in the Footer, that links to profile pages
+An interactive Menu component to toggle the Navigation on mobile
+
+Along the way, you’ll use CSS and JavaScript to build a responsive design that reacts to screen sizes and user input.
+
+	
+		ChecklistSection titled “Checklist”
+	
+ I am ready to build some Astro components!
+
+	
+
+
+
+	
+
+									
+
+	
+	
+	
+	
+	
+	
+	Tutorials
+
+									
+	
+	
+		
+
+		Learn Astro with Coding in Public
+		
+			
+				
+					
+				
+				150+ video lessons
+			
+			•
+			Astro v5 ready
+		
+		
+	
+	Get 20% off
+	
+
+	
+
+
+
+
+
+	
+		
+			
+				
+	
+
+				Edit page
+			
+			
+				
+	
+ Translate this page
+			
+		
+		
+	
+	
+	
+				
+	
+
+				
+					Previous
+					
+					Add site-wide styling
+				
+			
+	
+				
+	
+
+				
+					Next
+					
+					Make a reusable Navigation component
+				
+			
+
+
+	
+
+
+	
+		
+	
+
+		Contribute
+	
+
+	
+		
+			
+		
+		Community
+	
+
+	
+		
+	
+
+		Sponsor
+

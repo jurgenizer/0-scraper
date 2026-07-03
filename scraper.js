@@ -1,5 +1,5 @@
 import axios from 'axios';
-import * as cheerio from 'cheerio'; // Import cheerio as a namespace
+import * as cheerio from 'cheerio';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -9,18 +9,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Load configuration from config.json
-const configPath = path.join(__dirname, 'config.json');
-const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+const config = JSON.parse(fs.readFileSync(path.join(__dirname, 'config.json'), 'utf-8'));
 
-// Derive a meaningful filename slug from a URL
-function urlToSlug(url) {
-  const parsed = new URL(url);
-  const segments = parsed.pathname.split('/').filter(Boolean);
-  if (segments.length === 0) {
-    // Root URL — use hostname (e.g. "astro-build")
-    return parsed.hostname.replace(/\./g, '-');
-  }
-  return segments[segments.length - 1];
+// Turn a theory name into a filesystem-friendly slug, e.g.
+// "Absorptive capacity theory" -> "absorptive-capacity-theory"
+function nameToSlug(name) {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-') // non-alphanumerics become hyphens
+    .replace(/^-+|-+$/g, '');    // trim leading/trailing hyphens
 }
 
 // Ensure the output directory exists
@@ -29,33 +26,87 @@ if (!fs.existsSync(outputDir)) {
   fs.mkdirSync(outputDir, { recursive: true });
 }
 
-async function scrapePages(urls) {
-  for (const url of urls) {
-    try {
-      const { data: html } = await axios.get(url);
-      const $ = cheerio.load(html);
+// Fetch the index page and return the list of { name, url } for every theory.
+async function getTheoryLinks() {
+  const { data: html } = await axios.get(config.indexPage);
+  const $ = cheerio.load(html);
 
-     // Adjust the selector to target the text content
-     const text = $('body').text().trim(); 
+  const seen = new Set();
+  const theories = [];
+  // Theory entries are bullet-list links to /wiki/ articles in the page body.
+  // Namespace links (containing ":", e.g. Special: or disclaimer pages) are skipped.
+  $('.mw-parser-output li a[href^="/wiki/"]').each((_, el) => {
+    const href = $(el).attr('href');
+    if (href.includes(':')) return;
+    const name = $(el).text().trim();
+    if (!name || seen.has(href)) return;
+    seen.add(href);
+    theories.push({ name, url: new URL(href, config.baseUrl).href });
+  });
 
-      console.log(`Scraped data from: ${url}`);
+  return theories;
+}
 
-      // Extract the slug from the URL and use it as the filename
-      const slug = urlToSlug(url);
-      const filePath = path.join(outputDir, `${slug}.txt`);
-      fs.writeFileSync(filePath, `${text}\n\n`);
-    } catch (error) {
-      console.error(`Error scraping ${url}:`, error.message);
-      // Log errors to a file
-      fs.appendFileSync(path.join(__dirname, 'error.log'), `Error scraping ${url}: ${error.message}\n`);
+// Extract the plain-text content of a section identified by its heading text.
+// Content lives in the siblings following the heading's ".mw-heading" wrapper,
+// up to the next heading. Links and images are dropped; only their text remains.
+function extractSection($, headingText) {
+  let heading = null;
+  $('.mw-heading h2, .mw-heading h3').each((_, el) => {
+    if ($(el).text().trim().toLowerCase() === headingText.toLowerCase()) {
+      heading = $(el).closest('.mw-heading');
+      return false; // stop at first match
     }
+  });
+  if (!heading || heading.length === 0) return '';
 
+  const parts = [];
+  heading.nextUntil('.mw-heading').each((_, el) => {
+    const $el = $(el);
+    $el.find('figure, img, .plainlinks').remove(); // drop images / injected spam links
+    $el.find('br').replaceWith('\n');              // preserve line breaks (e.g. article lists)
+    const text = $el.text().replace(/[ \t]+\n/g, '\n').trim();
+    if (text) parts.push(text);
+  });
+  return parts.join('\n\n').replace(/\n{3,}/g, '\n\n'); // collapse runs of blank lines
+}
+
+async function scrapeTheory({ name, url }) {
+  const { data: html } = await axios.get(url);
+  const $ = cheerio.load(html);
+
+  const title = $('#firstHeading').text().trim() || name;
+
+  const sections = [`# ${title}`];
+  for (const field of config.fields) {
+    const content = extractSection($, field);
+    sections.push(`## ${field}\n${content || 'N/A'}`);
+  }
+
+  const filePath = path.join(outputDir, `${nameToSlug(name)}.txt`);
+  fs.writeFileSync(filePath, sections.join('\n\n') + '\n');
+  console.log(`Saved: ${path.basename(filePath)}`);
+}
+
+async function run() {
+  const theories = await getTheoryLinks();
+  console.log(`Found ${theories.length} theories on the index page.`);
+
+  for (const theory of theories) {
+    try {
+      await scrapeTheory(theory);
+    } catch (error) {
+      console.error(`Error scraping ${theory.url}: ${error.message}`);
+      fs.appendFileSync(
+        path.join(__dirname, 'error.log'),
+        `Error scraping ${theory.url}: ${error.message}\n`
+      );
+    }
     // Throttle requests to avoid rate-limiting
     await new Promise(r => setTimeout(r, 300));
   }
 
-  console.log('Scraping complete. Text files saved in the "scraped-text-files" directory.');
+  console.log(`Done. Text files saved in "${path.basename(outputDir)}".`);
 }
 
-// Run the scraper with URLs from the config file
-scrapePages(config.theUrls);
+run();

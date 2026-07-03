@@ -1,11 +1,9 @@
 {
-  "theUrls": [
-   "https://docs.astro.build/en/tutorial/0-introduction/",
-    "https://docs.astro.build/en/tutorial/1-setup/",
-    "https://docs.astro.build/en/tutorial/2-pages/",
-    "https://docs.astro.build/en/tutorial/3-components/",
-    "https://docs.astro.build/en/tutorial/4-layouts/",
-    "https://docs.astro.build/en/tutorial/5-astro-api/",
-    "https://docs.astro.build/en/tutorial/6-islands/"
-    ]
+  "baseUrl": "https://is.theorizeit.org",
+  "indexPage": "https://is.theorizeit.org/wiki/Main_Page",
+  "fields": [
+    "Concise description of theory",
+    "Originating author(s)",
+    "Seminal articles"
+  ]
 }
